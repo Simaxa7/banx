@@ -1,26 +1,41 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import BasicForm from "./components/BasicForm";
+import PaymentDescriptionSection from "./components/paymentDescriptionSection";
+import usePayerAccountsData from "./customHooks/usePayerAccountsData";
+import LanguageSelect from "./components/LanguageSelect";
+import {LanguageProvider} from "./contex/LanguageContext";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const {payerAccountsData, loading} = usePayerAccountsData();
+
+    return (
+        <LanguageProvider>
+            <div className="App">
+                <header className="header">
+                    <div className='header-wrapper'>
+                        <img src={logo} className="logo" alt="logo"/>
+                        <span>React app</span>
+                        <LanguageSelect/>
+                    </div>
+                </header>
+
+                {!loading
+                    ? <main className="main">
+                        <BasicForm payerAccountsData={payerAccountsData}/>
+                        <PaymentDescriptionSection/>
+                    </main>
+                    : <div>download in progress</div>
+                }
+
+                <footer className="footer">
+                    <img src={logo} className="logo" alt="logo"/>
+                    <span>React app</span>
+                </footer>
+            </div>
+        </LanguageProvider>
+    );
 }
 
 export default App;
